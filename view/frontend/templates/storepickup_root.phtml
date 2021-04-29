@@ -1,0 +1,156 @@
+<?php
+$storepickupData = $block->getStorepickup();
+foreach ($storepickupData as  $key => $storeData) {
+  $timeRange = $storeData['time_range'];
+  $timeRangeData = json_decode($timeRange, true);
+  $storeTime = array();
+  foreach ($timeRangeData as $key1 => $storeTimeRange) {
+    array_push($storeTime, $key1 . ' : ' . $storeTimeRange . '  ');
+  }
+  $storepickupData[$key]['store_time'] = $storeTime;
+}
+$baseHelper = $this->helper('Excellence\Storebase\Helper\Data');
+$storeUrl = $baseHelper->getStoreBaseUrl();
+$storeUrl = $storeUrl . "storelocator";
+$store = array();
+foreach ($storepickupData as $storeData) {
+  $storeData['storeUrl'] = $storeUrl;
+  $store = $storeData;
+}
+foreach ($storepickupData as $key => $storeData) {
+  $latitude = $storeData['latitude'];
+  $longitude = $storeData['longitude'];
+  $storepickupData[$key]['url'] = $storeUrl . '/index/store/?' . 'lat=' . $latitude . '&' . 'long=' . $longitude;
+}
+?>
+<script>
+  window.storepickup = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($storepickupData); ?>;
+  window.mapLink = "<?php echo $block->getBaseUrl() . 'storepickup'; ?>";
+  window.linkText = "<?php echo __('Check on Map'); ?>";
+  window.storeUrl = "<?php echo $storeUrl; ?>";
+  window.checkUrl = "<?php echo $block->getBaseUrl() . 'checkout/#shipping'; ?>";
+  window.payUrl = "<?php echo $block->getBaseUrl() . 'checkout/#payment'; ?>";
+</script>
+<script type="text/javascript">
+  requirejs(['jquery'], function($) {
+
+    setTimeout(function() {
+      var url = window.location.href;
+      if (url == window.payUrl) {
+        $('#pickupStr').hide();
+      }
+    }, 8000);
+
+    var delay = (function() {
+      var timer = 0;
+      return function(callback, ms) {
+        clearTimeout(timer);
+        timer = setTimeout(callback, ms);
+      };
+    })();
+
+    var isSearched = false;
+
+    function showMatchingStores(type, searchString, onload = false) {
+      if (!onload) {
+        $('.store').show();
+      }
+
+      var count = 0;
+      var elementText = '';
+      if (type == 'city') {
+        $('.store .storepickup-city').each(function() {
+          elementText = $(this).text();
+          if (elementText.toLowerCase() == searchString.toLowerCase()) {
+            count++;
+          }
+        });
+        if (count > 0) {
+          isSearched = true;
+          $('.store').hide();
+          $('.store .storepickup-city').each(function() {
+            elementText = $(this).text();
+            if (elementText.toLowerCase() == searchString.toLowerCase()) {
+              $(this).parent().show();
+            }
+          });
+        } else {
+          $('.store').hide();
+          $('.store .storepickup-country').each(function() {
+            elementText = $(this).text();
+            searchString = $("select[name='country_id'] option:selected").text();
+            if (elementText.toLowerCase() == searchString.toLowerCase()) {
+              $(this).parent().show();
+            }
+          });
+          isSearched = false;
+        }
+      }
+
+      if (type == 'country' && isSearched == false) {
+        $('.store .storepickup-country').each(function() {
+          elementText = $(this).text();
+          if (elementText.toLowerCase() == searchString.toLowerCase()) {
+            count++;
+          }
+        });
+        if (count > 0) {
+
+          $('.store').hide();
+          $('.store .storepickup-country').each(function() {
+            elementText = $(this).text();
+            if (elementText.toLowerCase() == searchString.toLowerCase()) {
+              $(this).parent().show();
+            }
+          });
+        }
+      }
+    }
+    $("#checkout-step-shipping_method").ready(function() {
+      $(document).on('change', 'input[type=radio]', function() {
+        if ($(this).attr('value') == "storepickup_storepickup") {
+          $("#shipping-method-buttons-container").hide();
+        } else {
+          $("#shipping-method-buttons-container").show();
+        }
+      });
+    });
+
+    $('.storepickup-button').ready(function() {
+      $(document).on('click', '.storepickup-button', function() {
+        var valueHidden = $(this).parent().find('#storebase_store_id').val();
+        var selectedStorepickup = "";
+        var flag = true;
+
+        $(this).parent().find('small').each(function() {
+          if ($(this).attr('class') != 'storepickup-time') {
+            if ($(this).attr('class') != 'time-toggle') {
+              if (flag == true) {
+                selectedStorepickup += $(this).text();
+                flag = false;
+              } else {
+                selectedStorepickup += ", " + $(this).text();
+              }
+            }
+          }
+        });
+
+        window.selectedStorepickup = selectedStorepickup;
+        $('.storepickup-row #storepickup-hidden').val(valueHidden);
+        $('.button.action.primary').trigger("click");
+      });
+    });
+    $('.opc-progress-bar').ready(function() {
+      $(document).on('click', '.opc-progress-bar', function() {
+        var url = window.location.href;
+        if (url == window.checkUrl) {
+          $('#pickupStr').show();
+        }
+      });
+    });
+    $(document).on('click', '.time-toggle', function() {
+      $(this).parent('div').find('.storepickup-time').toggle();
+      $(this).toggleClass('active');
+    });
+  });
+</script>
