@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
+  <head>
+    <css src="Excellence_Storepickup/css/custom.css" />
+  </head>
+
+  <body>
+    <referenceBlock name="checkout.root">
+      <arguments>
+        <argument name="jsLayout" xsi:type="array">
+          <item name="components" xsi:type="array">
+            <item name="checkout" xsi:type="array">
+              <item name="children" xsi:type="array">
+                <item name="steps" xsi:type="array">
+                  <item name="children" xsi:type="array">
+                    <item name="shipping-step" xsi:type="array">
+                      <item name="children" xsi:type="array">
+
+                      </item>
+                    </item>
+                    <item name="custom_shiping_fields" xsi:type="array">
+                      <item name="component" xsi:type="string">Excellence_Storepickup/js/view/storepickup</item>
+                      <item name="config" xsi:type="array">
+                        <item name="template" xsi:type="string">Excellence_Storepickup/storepickup</item>
+                      </item>
+                    </item>
+                  </item>
+                </item>
+              </item>
+            </item>
+          </item>
+        </argument>
+      </arguments>
+    </referenceBlock>
+    <referenceContainer name="root">
+      <block class="Excellence\Storepickup\Block\Check" name="storepickup.root" template="storepickup_root.phtml" />
+    </referenceContainer>
+
+  </body>
+</page>

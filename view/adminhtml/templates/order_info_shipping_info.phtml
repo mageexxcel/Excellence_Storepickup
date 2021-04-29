@@ -1,0 +1,23 @@
+<?php
+    if(!empty($block->getStorepickup())){
+        ?>
+            <div id="storepickup">
+                <strong><?php echo __('Storepickup Location: ');  ?></strong>
+                <span class="storepickup-desc"><?=$block->getStorepickup() ?></span>
+            </div>
+            <script type="text/javascript">
+                require(
+                    ['jquery'],
+                    function($) {
+                        var element = $('#storepickup').detach();
+                        console.log(element);
+                        $('.order-shipping-method').append(element);
+                        $('.shipping-description-title').append(element);
+                        $('.shipping-description-content').append(element);
+                    }
+                );
+            </script>
+        <?php
+    }
+?>
+            

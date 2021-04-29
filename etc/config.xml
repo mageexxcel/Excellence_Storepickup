@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <storepickup>
+                <active>0</active>
+                <sallowspecific>0</sallowspecific>
+                <model>Excellence\Storepickup\Model\Carrier\Storepickup</model>
+                <name>Excellence Storepickup</name>
+                <price>0.00</price>
+                <title>Storepickup</title>
+                <type>I</type>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+            </storepickup>
+        </carriers>
+
+        <googleMap>
+            <setting>
+                <latitude>37.0902</latitude>
+                <longitude>95.7129</longitude>
+            </setting>
+        </googleMap>
+    </default>
+</config>

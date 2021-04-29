@@ -1,0 +1,44 @@
+<div id="pickupStr" data-bind="visible: isVisible">
+   <div class="storepickup-row">
+   <input id="storepickup-hidden" type="hidden" name="storebase" />
+        <span data-bind="i18n: 'Choose Pickup Location'"></span>
+        : <br/>
+
+        <!--ko foreach: { data: storepickups(), as: 'storepickup'}-->
+          <div class="store">
+            <input id="storebase_store_id" type="hidden" data-bind="value: storepickup.storebase_id"/><br/>
+            <small class="storepickup-store_name" data-bind="text: storepickup.store_name" ></small><br/>
+            <!--ko if: storepickup.street_two-->
+            <small class="storepickup-street_one" data-bind="text: storepickup.street_one"></small>,<br/>
+            <small class="storepickup-street_two" data-bind="text: storepickup.street_two"></small><br/>
+            <!--/ko -->
+            <!--ko if: !storepickup.street_two-->
+            <small class="storepickup-street_one" data-bind="text: storepickup.street_one"></small><br/>
+            <!--/ko -->
+            <small class="storepickup-city" data-bind="text: storepickup.city"></small><br/>
+            <small class="storepickup-region_id" data-bind="text: storepickup.region_id"></small> -
+            <small class="storepickup-zipcode" data-bind="text: storepickup.zipcode"></small><br/>
+            <small class="storepickup-country" data-bind="text: storepickup.country"></small><br/>
+            <a href="javascript:void(0)" class="time-toggle"><span><small class="time-toggle" data-bind="i18n: 'See Timings'"><span data-bind="i18n: 'Pickup'"></span></span></small><span class="active timeDrop">&#9650;</span><span class="inactive timeDropdown">&#9660;</span></a><br/>
+            <div id='workTime'>
+            <div><small class="storepickup-time" data-bind="text: store_time['0']"></small></div>
+             <div><small class="storepickup-time" data-bind="text: store_time['1']"></small></div>
+              <div><small class="storepickup-time" data-bind="text: store_time['2']"></small></div>
+               <div><small class="storepickup-time" data-bind="text: store_time['3']"></small></div>
+                <div><small class="storepickup-time" data-bind="text: store_time['4']"></small></div>
+                 <div><small class="storepickup-time" data-bind="text: store_time['5']"></small></div>
+                  <div><small class="storepickup-time" data-bind="text: store_time['6']"></small></div>
+                  <br/>
+                  </div>
+
+            <a data-bind="text: linkText, attr: { href: storepickup.url, target: '_blank' }" ></a><br/>
+            <!-- <a data-bind="attr: { href: mapLink }">Open file</a> -->
+            <button id="pickup" class="storepickup-button"
+                                  data-bind="attr: {
+                                                    'id': storepickup.storebase_id
+                                                 },"><span data-bind="i18n: 'Pickup'"></span></button><br/>
+          </div>
+        <!-- /ko -->
+    </div>
+</div>
+<div class="clearDiv"></div>
